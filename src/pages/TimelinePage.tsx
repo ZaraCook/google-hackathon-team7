@@ -1,3 +1,5 @@
+import { Card, Panel } from '../components/common'
+
 function TimelinePage() {
   return (
     <section className="page-shell">
@@ -5,10 +7,18 @@ function TimelinePage() {
         <h2>Timeline</h2>
         <p>Placeholder timeline page for future event and time-flow views.</p>
       </header>
-      <div className="page-card">
-        <h3>Timeline</h3>
-        <p>Build the flowing day timeline and event stream here.</p>
-      </div>
+
+      <Panel
+        title="Timeline"
+        subtitle="Flowing event layers, time windows, and scheduled items."
+      >
+        <Card
+          title="Timeline lane"
+          description="A reusable card for future hourly, daily, or weekly views."
+        >
+          <p>Build the flowing day timeline and event stream here.</p>
+        </Card>
+      </Panel>
     </section>
   )
 }
