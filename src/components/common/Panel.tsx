@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import './common.css'
 
@@ -19,7 +20,13 @@ function Panel({
   const classNames = ['ui-panel', className].filter(Boolean).join(' ')
 
   return (
-    <section className={classNames}>
+    <motion.section
+      className={classNames}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.28, ease: 'easeOut' }}
+    >
       {(title || subtitle || actions) && (
         <header className="ui-panel__header">
           <div>
@@ -31,7 +38,7 @@ function Panel({
       )}
 
       {children ? <div className="ui-panel__body">{children}</div> : null}
-    </section>
+    </motion.section>
   )
 }
 
