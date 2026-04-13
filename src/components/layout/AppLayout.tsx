@@ -2,11 +2,9 @@ import { NavLink, Outlet } from 'react-router-dom'
 import './AppLayout.css'
 
 const navItems = [
-  { label: 'Overview', to: '/' },
+  { label: 'Dashboard', to: '/' },
   { label: 'Timeline', to: '/timeline' },
-  { label: 'Habits', to: '/habits' },
-  { label: 'Health', to: '/health' },
-  { label: 'Goals', to: '/goals' },
+  { label: 'Analytics', to: '/analytics' },
 ]
 
 function AppLayout() {
