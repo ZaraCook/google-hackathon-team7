@@ -58,11 +58,14 @@ body {
     radial-gradient(circle at top right, rgba(96, 165, 250, 0.18), transparent 28%),
     linear-gradient(180deg, #090b14 0%, #0b1020 100%);
   background-attachment: fixed;
+  overflow-x: hidden;
 }
 
 #root {
-  width: min(1120px, 100% - 2rem);
-  margin: 1rem auto;
+  width: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 1rem;
 }
 
 h1,
@@ -142,7 +145,6 @@ button:hover {
 
 @media (max-width: 640px) {
   #root {
-    width: calc(100% - 1rem);
-    margin: 0.5rem auto;
+    padding: 0.5rem;
   }
 }
