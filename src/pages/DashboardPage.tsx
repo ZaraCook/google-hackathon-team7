@@ -1,8 +1,10 @@
 import { Card, Panel } from '../components/common'
-import { mockDataset } from '../utils/mockData'
+import { useLifeStore } from '../services/lifeStore'
 
 function DashboardPage() {
-  const { tasks, habits, sessions } = mockDataset
+  const tasks = useLifeStore((state) => state.tasks)
+  const habits = useLifeStore((state) => state.habits)
+  const sessions = useLifeStore((state) => state.sessions)
   const openTasks = tasks.filter((task) => task.status !== 'done').length
 
   return (

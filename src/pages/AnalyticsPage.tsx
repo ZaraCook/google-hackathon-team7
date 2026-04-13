@@ -1,12 +1,17 @@
 import { Card, Panel } from '../components/common'
-import { mockHabits, mockTasks } from '../utils/mockData'
+import { useLifeStore } from '../services/lifeStore'
 
 function AnalyticsPage() {
-  const doneTasks = mockTasks.filter((task) => task.status === 'done').length
-  const completionRate = Math.round((doneTasks / mockTasks.length) * 100)
-  const averageStreak = Math.round(
-    mockHabits.reduce((sum, habit) => sum + habit.streak, 0) / mockHabits.length,
-  )
+  const tasks = useLifeStore((state) => state.tasks)
+  const habits = useLifeStore((state) => state.habits)
+  const doneTasks = tasks.filter((task) => task.status === 'done').length
+  const completionRate = tasks.length > 0 ? Math.round((doneTasks / tasks.length) * 100) : 0
+  const averageStreak =
+    habits.length > 0
+      ? Math.round(
+          habits.reduce((sum, habit) => sum + habit.streak, 0) / habits.length,
+        )
+      : 0
 
   return (
     <section className="page-shell">
@@ -24,14 +29,16 @@ function AnalyticsPage() {
             <p className="metric-value">{averageStreak} days</p>
           </Card>
           <Card title="Highest Streak" description="Best single habit streak">
-            <p className="metric-value">{Math.max(...mockHabits.map((habit) => habit.bestStreak))} days</p>
+            <p className="metric-value">
+              {habits.length > 0 ? Math.max(...habits.map((habit) => habit.bestStreak)) : 0} days
+            </p>
           </Card>
         </div>
       </Panel>
 
       <Panel title="Habit Details" subtitle="Mock baseline for upcoming charts.">
         <div className="stack-list">
-          {mockHabits.map((habit) => (
+          {habits.map((habit) => (
             <Card
               key={habit.id}
               title={habit.name}

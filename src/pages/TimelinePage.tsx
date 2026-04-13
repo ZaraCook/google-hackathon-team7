@@ -1,5 +1,5 @@
 import { Card, Panel } from '../components/common'
-import { mockSessions } from '../utils/mockData'
+import { useLifeStore } from '../services/lifeStore'
 
 function formatTime(value: string) {
   return new Date(value).toLocaleTimeString([], {
@@ -9,6 +9,8 @@ function formatTime(value: string) {
 }
 
 function TimelinePage() {
+  const sessions = useLifeStore((state) => state.sessions)
+
   return (
     <section className="page-shell">
       <header className="page-header">
@@ -18,10 +20,10 @@ function TimelinePage() {
 
       <Panel
         title="Session Timeline"
-        subtitle="Ordered list of current day sessions from mock data."
+        subtitle="Ordered list of current day sessions from store data."
       >
         <div className="stack-list">
-          {mockSessions.map((session) => (
+          {sessions.map((session) => (
             <Card
               key={session.id}
               title={session.label}
