@@ -1,11 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from './components/layout/AppLayout'
 import {
-  GoalsPage,
-  HabitsPage,
-  HealthPage,
+  AnalyticsPage,
   NotFoundPage,
-  OverviewPage,
+  DashboardPage,
   TimelinePage,
 } from './pages'
 
@@ -13,11 +11,9 @@ function App() {
   return (
     <Routes>
       <Route element={<AppLayout />}>
-        <Route index element={<OverviewPage />} />
+        <Route index element={<DashboardPage />} />
         <Route path="timeline" element={<TimelinePage />} />
-        <Route path="habits" element={<HabitsPage />} />
-        <Route path="health" element={<HealthPage />} />
-        <Route path="goals" element={<GoalsPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
       <Route path="/home" element={<Navigate to="/" replace />} />

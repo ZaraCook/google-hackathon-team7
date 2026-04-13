@@ -1,6 +1,4 @@
-export { default as OverviewPage } from './OverviewPage'
+export { default as DashboardPage } from './DashboardPage'
 export { default as TimelinePage } from './TimelinePage'
-export { default as HabitsPage } from './HabitsPage'
-export { default as HealthPage } from './HealthPage'
-export { default as GoalsPage } from './GoalsPage'
+export { default as AnalyticsPage } from './AnalyticsPage'
 export { default as NotFoundPage } from './NotFoundPage'
