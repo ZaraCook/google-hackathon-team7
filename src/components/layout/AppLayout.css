@@ -6,11 +6,14 @@
 }
 
 .app-header {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    var(--color-glass);
+  border: 1px solid rgba(148, 163, 184, 0.22);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--space-4) var(--space-5);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .app-kicker {
@@ -34,10 +37,13 @@
 
 .app-sidebar,
 .app-main {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    var(--color-glass);
+  border: 1px solid rgba(148, 163, 184, 0.18);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .app-sidebar {
@@ -57,18 +63,18 @@
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   color: var(--color-muted);
-  background: var(--color-surface-2);
+  background: rgba(15, 23, 42, 0.46);
   transition: background-color 120ms ease, color 120ms ease;
 }
 
 .sidebar-link:hover {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .sidebar-link.active {
   color: var(--color-accent);
-  background: var(--color-accent-soft);
+  background: rgba(96, 165, 250, 0.16);
 }
 
 .app-main {
@@ -88,6 +94,25 @@
 
 .page-header p {
   color: var(--color-muted);
+}
+
+.page-shell {
+  position: relative;
+}
+
+.page-shell::before {
+  content: '';
+  position: absolute;
+  inset: -1rem;
+  background: radial-gradient(circle at top, rgba(96, 165, 250, 0.12), transparent 55%);
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-shell > * {
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 900px) {
