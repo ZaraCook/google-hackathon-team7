@@ -1,33 +1,27 @@
-import './App.css'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import AppLayout from './components/layout/AppLayout'
+import {
+  GoalsPage,
+  HabitsPage,
+  HealthPage,
+  NotFoundPage,
+  OverviewPage,
+  TimelinePage,
+} from './pages'
 
 function App() {
   return (
-    <div className="app-layout">
-      <header className="app-header">
-        <h1>Digital Twin Dashboard</h1>
-      </header>
-
-      <div className="app-body">
-        <aside className="app-sidebar" aria-label="Primary navigation">
-          <nav>
-            <ul>
-              <li>Overview</li>
-              <li>Timeline</li>
-              <li>Habits</li>
-              <li>Health</li>
-              <li>Goals</li>
-            </ul>
-          </nav>
-        </aside>
-
-        <main className="app-main" aria-label="Main content area">
-          <section className="main-placeholder">
-            <h2>Main Content Area</h2>
-            <p>Feature modules will be added here over time.</p>
-          </section>
-        </main>
-      </div>
-    </div>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route index element={<OverviewPage />} />
+        <Route path="timeline" element={<TimelinePage />} />
+        <Route path="habits" element={<HabitsPage />} />
+        <Route path="health" element={<HealthPage />} />
+        <Route path="goals" element={<GoalsPage />} />
+      </Route>
+      <Route path="*" element={<NotFoundPage />} />
+      <Route path="/home" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 
