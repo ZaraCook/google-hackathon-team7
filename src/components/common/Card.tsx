@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import './common.css'
 
@@ -19,7 +20,13 @@ function Card({
   const classNames = ['ui-card', className].filter(Boolean).join(' ')
 
   return (
-    <article className={classNames}>
+    <motion.article
+      className={classNames}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4, scale: 1.01 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+    >
       {(title || description) && (
         <header className="ui-card__header">
           <div>
@@ -34,7 +41,7 @@ function Card({
       {children ? <div className="ui-card__body">{children}</div> : null}
 
       {footer ? <footer className="ui-card__footer">{footer}</footer> : null}
-    </article>
+    </motion.article>
   )
 }
 

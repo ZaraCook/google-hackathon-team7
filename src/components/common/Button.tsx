@@ -1,7 +1,9 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { motion } from 'framer-motion'
+import type { HTMLMotionProps } from 'framer-motion'
+import type { ReactNode } from 'react'
 import './common.css'
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = HTMLMotionProps<'button'> & {
   variant?: 'primary' | 'secondary' | 'ghost'
   children: ReactNode
 }
@@ -18,9 +20,15 @@ function Button({
     .join(' ')
 
   return (
-    <button type={type} className={classNames} {...props}>
+    <motion.button
+      type={type}
+      className={classNames}
+      whileTap={{ scale: 0.97 }}
+      whileHover={{ y: -1 }}
+      {...props}
+    >
       {children}
-    </button>
+    </motion.button>
   )
 }
 

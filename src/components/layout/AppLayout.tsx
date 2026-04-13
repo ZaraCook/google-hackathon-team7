@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { NavLink, Outlet } from 'react-router-dom'
 import './AppLayout.css'
 
@@ -9,16 +10,32 @@ const navItems = [
 
 function AppLayout() {
   return (
-    <div className="app-layout">
-      <header className="app-header">
+    <motion.div
+      className="app-layout"
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
+    >
+      <motion.header
+        className="app-header"
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: 0.05 }}
+      >
         <div>
           <p className="app-kicker">Digital Twin Dashboard</p>
           <h1>Digital Twin Dashboard</h1>
         </div>
-      </header>
+      </motion.header>
 
       <div className="app-body">
-        <aside className="app-sidebar" aria-label="Primary navigation">
+        <motion.aside
+          className="app-sidebar"
+          aria-label="Primary navigation"
+          initial={{ opacity: 0, x: -12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.35, delay: 0.08 }}
+        >
           <nav>
             <ul>
               {navItems.map((item) => (
@@ -36,13 +53,19 @@ function AppLayout() {
               ))}
             </ul>
           </nav>
-        </aside>
+        </motion.aside>
 
-        <main className="app-main" aria-label="Main content area">
+        <motion.main
+          className="app-main"
+          aria-label="Main content area"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.12 }}
+        >
           <Outlet />
-        </main>
+        </motion.main>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
