@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import type { Session } from '../../types'
 import './DayTimeline.css'
 
@@ -85,18 +86,28 @@ function DayTimeline({ sessions, zoomLevel = 'hours' }: DayTimelineProps) {
       aria-label="Horizontal timeline of your day"
     >
       <div className="day-timeline__scroll">
-        <div className="day-timeline__track" style={{ width: `${zoomFactor * 100}%` }}>
+        <motion.div
+          className="day-timeline__track"
+          style={{ width: `${zoomFactor * 100}%` }}
+          initial={false}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
           {segments.map((segment) => {
             const left = ((segment.startMinutes - windowRange.start) / duration) * 100
             const width =
               ((segment.endMinutes - segment.startMinutes) / duration) * 100
 
             return (
-              <div
+              <motion.div
                 key={segment.id}
                 className={`day-timeline__segment day-timeline__segment--${segment.type}`}
                 style={{ left: `${left}%`, width: `${Math.max(width, zoomLevel === 'minutes' ? 2.8 : 4)}%` }}
                 title={`${segment.label} (${formatTick(segment.startMinutes)}-${formatTick(segment.endMinutes)})`}
+                layout
+                initial={{ opacity: 0.7, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 26, mass: 0.45 }}
               >
                 <span>
                   {segment.label}
@@ -104,18 +115,26 @@ function DayTimeline({ sessions, zoomLevel = 'hours' }: DayTimelineProps) {
                     ? ` (${formatTick(segment.startMinutes)}-${formatTick(segment.endMinutes)})`
                     : ''}
                 </span>
-              </div>
+              </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       </div>
 
       <div className="day-timeline__scroll">
-        <div className="day-timeline__ticks" style={{ width: `${zoomFactor * 100}%` }} aria-hidden="true">
+        <motion.div
+          className="day-timeline__ticks"
+          style={{ width: `${zoomFactor * 100}%` }}
+          aria-hidden="true"
+          key={`${zoomLevel}-${ticks.length}`}
+          initial={{ opacity: 0.5 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.18 }}
+        >
           {ticks.map((tick) => (
             <span key={tick}>{formatTick(tick)}</span>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   )

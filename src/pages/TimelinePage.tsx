@@ -22,6 +22,33 @@ function toIso(date: Date) {
   return date.toISOString()
 }
 
+const blockListVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.06,
+      delayChildren: 0.04,
+    },
+  },
+}
+
+const blockItemVariants = {
+  hidden: { opacity: 0, y: 10, scale: 0.985 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.24 },
+  },
+  exit: {
+    opacity: 0,
+    y: -6,
+    scale: 0.985,
+    transition: { duration: 0.16 },
+  },
+}
+
 function reorderAndReschedule(
   sessions: ReturnType<typeof useLifeStore.getState>['sessions'],
   draggedId: string,
@@ -138,50 +165,62 @@ function TimelinePage() {
           </motion.div>
         </AnimatePresence>
 
-        <motion.div className="time-blocks-grid" aria-label="Time blocks" layout>
-          {sessions.map((session) => (
-            <motion.article
-              key={session.id}
-              className={`time-block${
-                draggingId === session.id ? ' time-block--dragging' : ''
-              }${dropTargetId === session.id ? ' time-block--drop-target' : ''}`}
-              layout
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              draggable
-              onDragStart={() => setDraggingId(session.id)}
-              onDragEnd={() => {
-                setDraggingId(null)
-                setDropTargetId(null)
-              }}
-              onDragOver={(event) => {
-                event.preventDefault()
-                setDropTargetId(session.id)
-              }}
-              onDragEnter={() => setDropTargetId(session.id)}
-              onDragLeave={() => {
-                if (dropTargetId === session.id) {
+        <motion.div
+          className="time-blocks-grid"
+          aria-label="Time blocks"
+          layout
+          variants={blockListVariants}
+          initial="hidden"
+          animate="show"
+        >
+          <AnimatePresence mode="popLayout">
+            {sessions.map((session) => (
+              <motion.article
+                key={session.id}
+                layout
+                layoutId={session.id}
+                className={`time-block${
+                  draggingId === session.id ? ' time-block--dragging' : ''
+                }${dropTargetId === session.id ? ' time-block--drop-target' : ''}`}
+                variants={blockItemVariants}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+                whileHover={{ y: -2 }}
+                draggable
+                onDragStart={() => setDraggingId(session.id)}
+                onDragEnd={() => {
+                  setDraggingId(null)
                   setDropTargetId(null)
-                }
-              }}
-              onDrop={(event) => handleDrop(event, session.id)}
-            >
-              <div className="time-block__head">
-                <h3>{session.label}</h3>
-                <span className={`time-block__badge time-block__badge--${session.type}`}>
-                  {session.type}
-                </span>
-              </div>
-              <p className="time-block__range">
-                {formatTime(session.startTime)} - {formatTime(session.endTime)}
-              </p>
-              <p className="time-block__meta">
-                {getDurationMinutes(session.startTime, session.endTime)} min · {session.timezone}
-                {session.energyLevel ? ` · energy ${session.energyLevel}/10` : ''}
-              </p>
-            </motion.article>
-          ))}
+                }}
+                onDragOver={(event) => {
+                  event.preventDefault()
+                  setDropTargetId(session.id)
+                }}
+                onDragEnter={() => setDropTargetId(session.id)}
+                onDragLeave={() => {
+                  if (dropTargetId === session.id) {
+                    setDropTargetId(null)
+                  }
+                }}
+                onDrop={(event) => handleDrop(event, session.id)}
+              >
+                <div className="time-block__head">
+                  <h3>{session.label}</h3>
+                  <span className={`time-block__badge time-block__badge--${session.type}`}>
+                    {session.type}
+                  </span>
+                </div>
+                <p className="time-block__range">
+                  {formatTime(session.startTime)} - {formatTime(session.endTime)}
+                </p>
+                <p className="time-block__meta">
+                  {getDurationMinutes(session.startTime, session.endTime)} min · {session.timezone}
+                  {session.energyLevel ? ` · energy ${session.energyLevel}/10` : ''}
+                </p>
+              </motion.article>
+            ))}
+          </AnimatePresence>
         </motion.div>
       </Panel>
     </section>
