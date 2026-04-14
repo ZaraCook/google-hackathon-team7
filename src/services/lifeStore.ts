@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { Habit, Session, Task } from '../types'
 import { mockDataset } from '../utils/mockData'
 
@@ -31,56 +32,69 @@ type LifeState = {
   resetMockData: () => void
 }
 
-export const useLifeStore = create<LifeState>((set) => ({
-  tasks: mockDataset.tasks,
-  habits: mockDataset.habits,
-  sessions: mockDataset.sessions,
-  isLoading: false,
-  setTasks: (tasks) => set({ tasks }),
-  setHabits: (habits) => set({ habits }),
-  setSessions: (sessions) => set({ sessions }),
-  setLoading: (isLoading) => set({ isLoading }),
-  addTask: (task) => {
-    const now = new Date().toISOString()
-    set((state) => ({
-      tasks: [
-        {
-          id: createTaskId(),
-          title: task.title,
-          description: task.description,
-          status: task.status,
-          priority: task.priority,
-          estimateMinutes: task.estimateMinutes,
-          tags: task.tags,
-          createdAt: now,
-          updatedAt: now,
-        },
-        ...state.tasks,
-      ],
-    }))
-  },
-  editTask: (id, updates) => {
-    const now = new Date().toISOString()
-    set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              ...updates,
-              updatedAt: now,
-            }
-          : task,
-      ),
-    }))
-  },
-  deleteTask: (id) =>
-    set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== id),
-    })),
-  resetMockData: () =>
-    set({
+export const useLifeStore = create<LifeState>()(
+  persist(
+    (set) => ({
       tasks: mockDataset.tasks,
       habits: mockDataset.habits,
       sessions: mockDataset.sessions,
+      isLoading: false,
+      setTasks: (tasks) => set({ tasks }),
+      setHabits: (habits) => set({ habits }),
+      setSessions: (sessions) => set({ sessions }),
+      setLoading: (isLoading) => set({ isLoading }),
+      addTask: (task) => {
+        const now = new Date().toISOString()
+        set((state) => ({
+          tasks: [
+            {
+              id: createTaskId(),
+              title: task.title,
+              description: task.description,
+              status: task.status,
+              priority: task.priority,
+              estimateMinutes: task.estimateMinutes,
+              tags: task.tags,
+              createdAt: now,
+              updatedAt: now,
+            },
+            ...state.tasks,
+          ],
+        }))
+      },
+      editTask: (id, updates) => {
+        const now = new Date().toISOString()
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === id
+              ? {
+                  ...task,
+                  ...updates,
+                  updatedAt: now,
+                }
+              : task,
+          ),
+        }))
+      },
+      deleteTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.filter((task) => task.id !== id),
+        })),
+      resetMockData: () =>
+        set({
+          tasks: mockDataset.tasks,
+          habits: mockDataset.habits,
+          sessions: mockDataset.sessions,
+        }),
     }),
-}))
+    {
+      name: 'digital-twin-life-store',
+      partialize: (state) => ({
+        tasks: state.tasks,
+        habits: state.habits,
+        sessions: state.sessions,
+        isLoading: state.isLoading,
+      }),
+    },
+  ),
+)
