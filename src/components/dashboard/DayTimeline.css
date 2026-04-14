@@ -1,0 +1,92 @@
+.day-timeline {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.day-timeline__track {
+  position: relative;
+  min-height: 86px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background:
+    linear-gradient(180deg, rgba(96, 165, 250, 0.08), rgba(15, 23, 42, 0.05)),
+    rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.day-timeline__track::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(148, 163, 184, 0.12) 0,
+    rgba(148, 163, 184, 0.12) 1px,
+    transparent 1px,
+    transparent 8.33%
+  );
+  pointer-events: none;
+}
+
+.day-timeline__segment {
+  position: absolute;
+  top: 12px;
+  height: 62px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-2);
+  text-align: center;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.day-timeline__segment span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.day-timeline__segment--focus {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.85), rgba(37, 99, 235, 0.75));
+}
+
+.day-timeline__segment--break {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.72));
+}
+
+.day-timeline__segment--exercise {
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.86), rgba(234, 88, 12, 0.72));
+}
+
+.day-timeline__segment--sleep {
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.85), rgba(79, 70, 229, 0.72));
+}
+
+.day-timeline__segment--admin {
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.84), rgba(147, 51, 234, 0.7));
+}
+
+.day-timeline__segment--other {
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.85), rgba(100, 116, 139, 0.72));
+}
+
+.day-timeline__ticks {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 700px) {
+  .day-timeline__segment span {
+    font-size: 0.7rem;
+  }
+}
