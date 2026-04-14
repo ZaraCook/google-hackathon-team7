@@ -1,4 +1,5 @@
 import { Card, Panel } from '../components/common'
+import DayTimeline from '../components/dashboard/DayTimeline'
 import { useLifeStore } from '../services/lifeStore'
 
 function formatTime(value: string) {
@@ -22,6 +23,8 @@ function TimelinePage() {
         title="Session Timeline"
         subtitle="Ordered list of current day sessions from store data."
       >
+        <DayTimeline sessions={sessions} />
+
         <div className="stack-list">
           {sessions.map((session) => (
             <Card
