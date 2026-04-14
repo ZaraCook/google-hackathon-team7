@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { DragEvent } from 'react'
-import { Panel } from '../components/common'
+import { Button, Panel } from '../components/common'
 import DayTimeline from '../components/dashboard/DayTimeline'
 import { useLifeStore } from '../services/lifeStore'
 
@@ -77,6 +77,7 @@ function TimelinePage() {
   const setSessions = useLifeStore((state) => state.setSessions)
   const [draggingId, setDraggingId] = useState<string | null>(null)
   const [dropTargetId, setDropTargetId] = useState<string | null>(null)
+  const [zoomLevel, setZoomLevel] = useState<'hours' | 'minutes'>('hours')
 
   const sessions = rawSessions.toSorted(
     (a, b) =>
@@ -112,9 +113,25 @@ function TimelinePage() {
 
       <Panel
         title="Session Timeline"
-        subtitle="Drag blocks to reorder your day. Timeline will reschedule in that order."
+        subtitle="Drag blocks to reorder your day. Use zoom to move between hour and minute views."
+        actions={
+          <div className="timeline-zoom-controls" role="group" aria-label="Timeline zoom level">
+            <Button
+              variant={zoomLevel === 'hours' ? 'primary' : 'secondary'}
+              onClick={() => setZoomLevel('hours')}
+            >
+              Hours
+            </Button>
+            <Button
+              variant={zoomLevel === 'minutes' ? 'primary' : 'secondary'}
+              onClick={() => setZoomLevel('minutes')}
+            >
+              Minutes
+            </Button>
+          </div>
+        }
       >
-        <DayTimeline sessions={sessions} />
+        <DayTimeline sessions={sessions} zoomLevel={zoomLevel} />
 
         <div className="time-blocks-grid" aria-label="Time blocks">
           {sessions.map((session) => (
