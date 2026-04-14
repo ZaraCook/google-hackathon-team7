@@ -227,6 +227,11 @@
 .timeline-zoom-controls .ui-button {
   padding: 0.35rem 0.7rem;
   min-width: 82px;
+  transition: transform 140ms ease, opacity 140ms ease, box-shadow 180ms ease;
+}
+
+.timeline-zoom-controls .ui-button.ui-button--primary {
+  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.4), 0 8px 18px rgba(59, 130, 246, 0.25);
 }
 
 .task-form {

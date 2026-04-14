@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { DragEvent } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Button, Panel } from '../components/common'
 import DayTimeline from '../components/dashboard/DayTimeline'
 import { useLifeStore } from '../services/lifeStore'
@@ -84,12 +85,6 @@ function TimelinePage() {
       new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
   )
 
-  const handleDragStart = (event: DragEvent<HTMLElement>, sessionId: string) => {
-    event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('text/plain', sessionId)
-    setDraggingId(sessionId)
-  }
-
   const handleDrop = (event: DragEvent<HTMLElement>, targetId: string) => {
     event.preventDefault()
 
@@ -131,17 +126,31 @@ function TimelinePage() {
           </div>
         }
       >
-        <DayTimeline sessions={sessions} zoomLevel={zoomLevel} />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={zoomLevel}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+          >
+            <DayTimeline sessions={sessions} zoomLevel={zoomLevel} />
+          </motion.div>
+        </AnimatePresence>
 
-        <div className="time-blocks-grid" aria-label="Time blocks">
+        <motion.div className="time-blocks-grid" aria-label="Time blocks" layout>
           {sessions.map((session) => (
-            <article
+            <motion.article
               key={session.id}
               className={`time-block${
                 draggingId === session.id ? ' time-block--dragging' : ''
               }${dropTargetId === session.id ? ' time-block--drop-target' : ''}`}
+              layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
               draggable
-              onDragStart={(event) => handleDragStart(event, session.id)}
+              onDragStart={() => setDraggingId(session.id)}
               onDragEnd={() => {
                 setDraggingId(null)
                 setDropTargetId(null)
@@ -171,9 +180,9 @@ function TimelinePage() {
                 {getDurationMinutes(session.startTime, session.endTime)} min · {session.timezone}
                 {session.energyLevel ? ` · energy ${session.energyLevel}/10` : ''}
               </p>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </Panel>
     </section>
   )

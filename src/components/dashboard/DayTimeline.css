@@ -29,6 +29,7 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   overflow: hidden;
+  transition: width 220ms ease;
 }
 
 .day-timeline__track::before {
@@ -58,6 +59,7 @@
   text-align: center;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  transition: left 260ms ease, width 260ms ease, top 180ms ease, height 180ms ease;
 }
 
 .day-timeline__segment span {
@@ -108,6 +110,7 @@
   color: var(--color-muted);
   font-size: 0.78rem;
   min-width: 100%;
+  transition: width 220ms ease;
 }
 
 @media (max-width: 700px) {
