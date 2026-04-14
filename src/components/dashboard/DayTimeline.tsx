@@ -3,6 +3,7 @@ import './DayTimeline.css'
 
 type DayTimelineProps = {
   sessions: Session[]
+  zoomLevel?: 'hours' | 'minutes'
 }
 
 type SessionSegment = {
@@ -61,13 +62,16 @@ function getWindow(segments: SessionSegment[]) {
   return { start, end }
 }
 
-function DayTimeline({ sessions }: DayTimelineProps) {
+function DayTimeline({ sessions, zoomLevel = 'hours' }: DayTimelineProps) {
   const segments = toSegments(sessions)
   const windowRange = getWindow(segments)
   const duration = Math.max(1, windowRange.end - windowRange.start)
 
+  const tickStep = zoomLevel === 'minutes' ? 30 : 120
+  const zoomFactor = zoomLevel === 'minutes' ? 2.3 : 1
+
   const ticks: number[] = []
-  for (let minute = windowRange.start; minute <= windowRange.end; minute += 120) {
+  for (let minute = windowRange.start; minute <= windowRange.end; minute += tickStep) {
     ticks.push(minute)
   }
 
@@ -76,30 +80,42 @@ function DayTimeline({ sessions }: DayTimelineProps) {
   }
 
   return (
-    <div className="day-timeline" aria-label="Horizontal timeline of your day">
-      <div className="day-timeline__track">
-        {segments.map((segment) => {
-          const left = ((segment.startMinutes - windowRange.start) / duration) * 100
-          const width =
-            ((segment.endMinutes - segment.startMinutes) / duration) * 100
+    <div
+      className={`day-timeline day-timeline--${zoomLevel}`}
+      aria-label="Horizontal timeline of your day"
+    >
+      <div className="day-timeline__scroll">
+        <div className="day-timeline__track" style={{ width: `${zoomFactor * 100}%` }}>
+          {segments.map((segment) => {
+            const left = ((segment.startMinutes - windowRange.start) / duration) * 100
+            const width =
+              ((segment.endMinutes - segment.startMinutes) / duration) * 100
 
-          return (
-            <div
-              key={segment.id}
-              className={`day-timeline__segment day-timeline__segment--${segment.type}`}
-              style={{ left: `${left}%`, width: `${Math.max(width, 4)}%` }}
-              title={`${segment.label} (${formatTick(segment.startMinutes)}-${formatTick(segment.endMinutes)})`}
-            >
-              <span>{segment.label}</span>
-            </div>
-          )
-        })}
+            return (
+              <div
+                key={segment.id}
+                className={`day-timeline__segment day-timeline__segment--${segment.type}`}
+                style={{ left: `${left}%`, width: `${Math.max(width, zoomLevel === 'minutes' ? 2.8 : 4)}%` }}
+                title={`${segment.label} (${formatTick(segment.startMinutes)}-${formatTick(segment.endMinutes)})`}
+              >
+                <span>
+                  {segment.label}
+                  {zoomLevel === 'minutes'
+                    ? ` (${formatTick(segment.startMinutes)}-${formatTick(segment.endMinutes)})`
+                    : ''}
+                </span>
+              </div>
+            )
+          })}
+        </div>
       </div>
 
-      <div className="day-timeline__ticks" aria-hidden="true">
-        {ticks.map((tick) => (
-          <span key={tick}>{formatTick(tick)}</span>
-        ))}
+      <div className="day-timeline__scroll">
+        <div className="day-timeline__ticks" style={{ width: `${zoomFactor * 100}%` }} aria-hidden="true">
+          {ticks.map((tick) => (
+            <span key={tick}>{formatTick(tick)}</span>
+          ))}
+        </div>
       </div>
     </div>
   )
